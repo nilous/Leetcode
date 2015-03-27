@@ -1,0 +1,6 @@
+# Visual Studio solution files
+Leetcode.*
+
+# Build directories
+Debug/
+Release/
