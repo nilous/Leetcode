@@ -1,7 +1,7 @@
 #include <stdint.h>
 
-#define BitAt(n, i) ((n >> i) & 0x01)
-#define SetBitAt(n, i, b) (n |= (b << i))
+#define BitAt(n, i) ((n >> (i)) & 0x01)
+#define SetBitAt(n, i, b) (n |= (b << (i)))
 
 uint32_t reverseBits(uint32_t n) {
     uint32_t ret = 0;
