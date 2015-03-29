@@ -4,3 +4,6 @@ Leetcode.*
 # Build directories
 Debug/
 Release/
+
+# Binary
+a.out
