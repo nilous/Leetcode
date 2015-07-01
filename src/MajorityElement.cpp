@@ -17,8 +17,8 @@ int majorityElement(vector<int> &num) {
         }
     }
 
-    // It's guaranteed that the majority element dose exist,
+    // It's guaranteed that the majority element does exist,
     // so it's okay that not all control paths return a value.
-    // This return statment is used to comfort the compiler.
+    // This return statement is used to comfort the compiler.
     return 0;
 }
