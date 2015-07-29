@@ -7,3 +7,5 @@ Release/
 
 # Binary
 a.out
+*.obj
+*.exe
