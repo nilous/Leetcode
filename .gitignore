@@ -9,3 +9,5 @@ Release/
 a.out
 *.obj
 *.exe
+
+.vs/
