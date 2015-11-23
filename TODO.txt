@@ -12,3 +12,9 @@
 
 * Letter Combinations of a Phone Number
     backtracing方案
+
+问题修复
+========
+
+* Regular Expression Matching
+    目前只是简陋的实现，代码糟糕且没有正确释放内存。需重写。
