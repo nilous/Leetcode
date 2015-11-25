@@ -93,9 +93,82 @@ vector<vector<string>> solveNQueens(int n) {
     return solver.Solutions();
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// 2. 非递归
+
+// 在Intel E3-1230 V2 @ 3.30GHz的机器上，cl /O2编译：
+// 13皇后的耗时约为：
+// 递归：   21094 ms 
+// 非递归： 21140 ms
+// 因函数调用导致的时间开销，可以忽略不计。唯一的问题是递归可能导致stack overflow。
+
+class NQueensSolver_NonRecursion {
+    Board board;
+    vector<vector<string>> solutions;
+public:
+    explicit NQueensSolver_NonRecursion(int queens) : board(Board(queens)) {}
+    const vector<vector<string>> &Solutions() const { return solutions; }
+
+    int ColForRow(int r) const {
+        for (auto c = 0; c < board.Size(); ++c) {
+            if (board.Cells(r, c) != 0) return c;
+        }
+        return -1;
+    }
+
+    void Solve() {
+        int r, c;
+        r = c = 0;
+
+        while (1) {
+            c = ColForRow(r);
+            board.Clear(r);
+
+            auto cc = c+1;
+            for (; cc < board.Size(); ++cc) {
+                if (board.TryPut(r, cc)) {
+                    if (r == board.Size()-1) { solutions.push_back(BoardAsStringVector(board)); --r; }
+                    else { ++r; }
+                    break;
+                }
+            }
+            if (r < 0) return;
+            if (cc == board.Size()) {
+                if (r == 0) return;
+                else --r;
+            }
+        }
+    }
+};
+
+#include <Windows.h>
+
+class Timer {
+    DWORD begin;
+public:
+    Timer() : begin(GetTickCount()) {}
+    ~Timer() { cout << "Time eplased: " << GetTickCount()-begin << "ms.\n"; }
+};
+
+
 int main(int ac, char **av) {
-    auto solutions = solveNQueens(8);
-    cout << solutions.size() << '\n';
+#define N 13
+#define LOG_TIME Timer __lt__
+    NQueensSolver solver(N);
+
+    {
+        LOG_TIME;
+        solver.Solve();
+    }
+    cout << solver.Solutions().size() << '\n';
+
+    NQueensSolver_NonRecursion nr_solver(N);
+
+    {
+        LOG_TIME;
+        nr_solver.Solve();
+    }
+    cout << nr_solver.Solutions().size() << '\n';
 
     return 0;
 }
