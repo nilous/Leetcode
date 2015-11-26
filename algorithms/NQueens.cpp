@@ -141,6 +141,55 @@ public:
     }
 };
 
+////////////////////////////////////////////////////////////////////////////////
+// 3. 快的一b的位操作版本
+
+class NQueensSolver_Bits {
+    int n;
+    int uplimit;
+    vector<string> solution;
+    vector<vector<string>> solutions;
+public:
+    explicit NQueensSolver_Bits(int queens) : n(queens), uplimit((1<<n)-1) {}
+
+    void Solve() { d(0, 0, 0); }
+    vector<vector<string>> Solutions() const { return solutions; }
+private:
+    string RowAsString(int row) {
+        string r(n, '.');
+        auto i = 0;
+        while (1) {
+            if ((1<<i) == row) {
+                r[n-i-1] = 'Q';
+                break;
+            }
+            ++i;
+        }
+        return r;
+    }
+
+    void d(int r, int ld, int rd) {
+        if (r != uplimit) {
+            // 当前行可用位置
+            auto pos = ~(r|ld|rd)&uplimit;
+
+            while (pos != 0) {
+                // 取最低可用bit
+                auto p = pos&(~pos+1);
+                pos -= p;
+
+                solution.push_back(RowAsString(p));
+
+                d(r+p, (ld+p)<<1, (rd+p)>>1);
+
+                solution.pop_back();
+            }
+        } else {
+            solutions.push_back(solution);
+        }
+    }
+};
+
 #include <Windows.h>
 
 class Timer {
@@ -152,10 +201,9 @@ public:
 
 
 int main(int ac, char **av) {
-#define N 13
+#define N 8 
 #define LOG_TIME Timer __lt__
     NQueensSolver solver(N);
-
     {
         LOG_TIME;
         solver.Solve();
@@ -163,12 +211,25 @@ int main(int ac, char **av) {
     cout << solver.Solutions().size() << '\n';
 
     NQueensSolver_NonRecursion nr_solver(N);
-
     {
         LOG_TIME;
         nr_solver.Solve();
     }
     cout << nr_solver.Solutions().size() << '\n';
+
+    NQueensSolver_Bits bits_solver(N);
+    {
+        LOG_TIME;
+        bits_solver.Solve();
+    }
+    cout << bits_solver.Solutions().size() << '\n';
+
+    for (auto solution : bits_solver.Solutions()) {
+        for (auto row : solution) {
+            cout << row << '\n';
+        }
+        cout << "\n\n";
+    }
 
     return 0;
 }
