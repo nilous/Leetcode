@@ -7,7 +7,9 @@
     可能是因为使用了stringstream，效率差于大部分C++答案。
 
 * N-Queens
-    递归解法略慢。
+    递归解法略慢。 (已完成)
+
+* InsertionSortList.cpp
 
 尝试多种思路
 ============
